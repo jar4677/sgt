@@ -1,9 +1,6 @@
 /**
  * Define all global variables here
  */
-
-
-
 /**
  * studentArray - global array to hold student objects
  * @type {Array}
@@ -27,6 +24,8 @@ var tableBody = $("tbody");
 
 function addClicked(){
     addStudent();
+    updateData();
+    clearAddStudentForm();
 }
 
 /**
@@ -34,7 +33,7 @@ function addClicked(){
  */
 
 function cancelClicked() {
-    
+    clearAddStudentForm();
 }
 
 /**
@@ -45,9 +44,9 @@ function cancelClicked() {
 
 function addStudent() {
     var student = {
-        name: $(studentName).val(),
-        course: $(course).val(),
-        grade: $(studentGrade).val()
+        name: $("#studentName").val(),
+        course: $("#course").val(),
+        grade: parseInt($("#studentGrade").val())
     };
     studentArray.push(student);
 }
@@ -57,7 +56,8 @@ function addStudent() {
  */
 
 function clearAddStudentForm(){
-    $(studentName, course, studentGrade).text('');
+    $("#studentName, #course, #studentGrade").val('');
+    $("#studentName").focus();
 }
 
 /**
@@ -70,7 +70,7 @@ function calculateAverage() {
     for (var i = 0; i < studentArray.length; i++){
         total += studentArray[i].grade;
     }
-    return total / studentArray.length;
+    return Math.round(total / studentArray.length);
 }
 
 /**
@@ -78,7 +78,9 @@ function calculateAverage() {
  */
 
 function updateData(){
-    
+    var average = calculateAverage();
+    $(".avgGrade").text(average);
+    updateStudentList();
 }
 
 /**
@@ -86,7 +88,10 @@ function updateData(){
  */
 
 function updateStudentList() {
-    
+    $('tbody').html('');
+    for (var i = 0; i < studentArray.length; i++){
+        addStudentToDom(studentArray[i]);
+    }
 }
 
 /**
@@ -96,7 +101,18 @@ function updateStudentList() {
  */
 
 function addStudentToDom(studentObj) {
-    
+    var name = $("<td>").text(studentObj.name);
+    var course = $("<td>").text(studentObj.course);
+    var grade = $("<td>").text(studentObj.grade);
+
+    var del = $("<td>");
+    var delBtn = $("<button>").text('Delete').addClass('btn btn-danger').data(studentObj);
+
+    var row = $("<tr>");
+
+    $(del).append(delBtn);
+    $(row).append(name, course, grade, del);
+    $("tbody").append(row);
 }
 
 /**
@@ -105,11 +121,24 @@ function addStudentToDom(studentObj) {
 
 function reset() {
     studentArray = [];
-    $(tableBody).html('');
+    $("tbody").html("<h3>User Info Unavailable<h3>");
 }
 
 /**
  * Listen for the document to load and reset the data to the initial state
  */
 
-$(document).ready(reset());
+$(document).ready(function () {
+    reset();
+
+    $("tbody").on('click', '.btn', function () {
+        var row = $(this).parents()[1];
+        var index = $(row).index();
+        studentArray.splice(index, 1);
+        if (studentArray.length == 0){
+            reset();
+        } else {
+            updateStudentList();
+        }
+    })
+});
