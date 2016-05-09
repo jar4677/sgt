@@ -1,15 +1,22 @@
 /**
  * Define all global variables here
  */
+
+
+
 /**
  * student_array - global array to hold student objects
  * @type {Array}
  */
 
+
+
 /**
  * inputIds - id's of the elements that are used to add students
  * @type {string[]}
  */
+
+
 
 /**
  * addClicked - Event Handler when user clicks the add button
