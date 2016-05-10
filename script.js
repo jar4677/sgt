@@ -159,6 +159,13 @@ $(document).ready(function () {
             source: courses
         });
     });
+
+    $(function() {
+        var names = getNames();
+        $("#studentName").autocomplete({
+            source: names
+        });
+    });
 });
 
 //// TEST DATA FOR AUTOCOMPLETE /////
@@ -171,6 +178,16 @@ function getCourses (){
         }
     }
     return courses;
+}
+
+function getNames (){
+    var names = [];
+    for (var i = 0; i < testData.length; i++){
+        if (names.indexOf(testData[i].name) == -1){
+            names.push(testData[i].name);
+        }
+    }
+    return names;
 }
 
 var testData = [
