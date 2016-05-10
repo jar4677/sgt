@@ -79,7 +79,9 @@ function updateData() {
     var average = calculateAverage();
     $(".avgGrade").text(average);
     updateStudentList();
-    
+    updateCourseOptions();
+    updateNameOptions();
+    $("#unavailable").hide();
     if (studentArray.length == 0) {
         reset();
     }
@@ -120,7 +122,7 @@ function addStudentToDom(studentObj) {
  */
 function reset() {
     studentArray = [];
-    $("tbody").html("<h5>User Info Unavailable<h5>");
+    $("#unavailable").show();
 }
 
 /**
@@ -135,19 +137,22 @@ function dataValidation() {
     var course = $("#course").val();
     var grade = $("#studentGrade").val();
     
-    if (!isNaN(parseFloat(name))) {
+    if (!isNaN(parseFloat(name)) || name == '') {
         $("#student_div").addClass("has-error");
+        name = false;
     }
     
-    if (!isNaN(parseFloat(course))) {
+    if (!isNaN(parseFloat(course)) || course == '') {
         $("#course_div").addClass("has-error");
+        course = false;
     }
     
-    if (isNaN(parseFloat(grade))) {
+    if (isNaN(parseFloat(grade)) || grade == '') {
         $("#grade_div").addClass("has-error");
+        grade = false;
     }
     
-    return (isNaN(parseFloat(name)) && isNaN(parseFloat(course)) && !isNaN(parseFloat(grade)));
+    return (name && course && grade);
 }///////end of data validation
 
 /**
@@ -255,24 +260,32 @@ function sort() {
 }
 
 //functions get arrays for autocomplete
-function getCourses() {
+function updateCourseOptions() {
+    $("#course-list").html('');
     var courses = [];
     for (var i = 0; i < testData.length; i++) {
         if (courses.indexOf(testData[i].course) == -1) {
             courses.push(testData[i].course);
         }
     }
-    return courses;
+    for (var j = 0; j < courses.length; j++){
+        var option = $("<option>").val(courses[j]);
+        $("#course-list").append(option);
+    }
 }
 
-function getNames() {
+function updateNameOptions() {
+    $("#student-list").html();
     var names = [];
     for (var i = 0; i < testData.length; i++) {
         if (names.indexOf(testData[i].name) == -1) {
             names.push(testData[i].name);
         }
     }
-    return names;
+    for (var j = 0; j < names.length; j++){
+        var option = $("<option>").val(names[j]);
+        $("#student-list").append(option);
+    }
 }
 
 /**
@@ -294,22 +307,7 @@ $(document).ready(function () {
         //     }
         // })
     });
-    
-    //functions for jquery ui autocomplete widget
-    $(function () {
-        var courses = getCourses();
-        $("#course").autocomplete({
-            source: courses
-        });
-    });
-    
-    $(function () {
-        var names = getNames();
-        $("#studentName").autocomplete({
-            source: names
-        });
-    });
-    
+
     $("#add").click(addClicked);
     $("#cancel").click(cancelClicked);
 
@@ -333,7 +331,7 @@ var testData = [
     {
         id: 123458,
         name: "Erika O\'Neal",
-        course: CSS,
+        course: 'CSS',
         grade: 100
     },
     {
