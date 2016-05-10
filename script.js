@@ -43,12 +43,14 @@ function cancelClicked() {
  */
 
 function addStudent() {
-    var student = {
-        name: $("#studentName").val(),
-        course: $("#course").val(),
-        grade: parseInt($("#studentGrade").val())
-    };
-    studentArray.push(student);
+    if(dataValidation()) {
+        var student = {
+            name: $("#studentName").val(),
+            course: $("#course").val(),
+            grade: parseInt($("#studentGrade").val())
+        };
+        studentArray.push(student);
+    }
 }
 
 /**
@@ -66,11 +68,15 @@ function clearAddStudentForm(){
  */
 
 function calculateAverage() {
-    var total = 0;
-    for (var i = 0; i < studentArray.length; i++){
-        total += studentArray[i].grade;
+    if (studentArray.length>0) {
+        var total = 0;
+        for (var i = 0; i < studentArray.length; i++) {
+            total += studentArray[i].grade;
+        }
+        return Math.round(total / studentArray.length);
+    }else {
+        return 0;
     }
-    return Math.round(total / studentArray.length);
 }
 
 /**
@@ -123,10 +129,74 @@ function reset() {
     studentArray = [];
     $("tbody").html("<h3>User Info Unavailable<h3>");
 }
+////////////extra idea for validation
+var validation_params = {
+    '#studentName':
+    {
+        datatype_check:'string',
+        length:3
+    },
+    '#course':
+    {
+        datatype_check:'string',
+        length:5
+    },
+    '#grade' :
+    {
+        datatype_check: 'number',
+        length: 1
+    }
+
+};
+
+function validate_tester(test,value){
+    var error_array=[];
+    for(var index in test) {
+        switch (index) {
+            case 'datatype_check':
+                //do datatype check here
+                break;
+            case 'length':
+                //do length check here
+                if(value.length < test[index]){
+                    error_array.push(index);
+                }
+                break;
+
+        }
+    }
+    if(error_array.length>0) {
+        return error_array;
+    }
+    return true;
+}
+/////////////////data validation
+function dataValidation() {
+    remove_extra_classes();
+ if (!isNaN(parseFloat($("#studentName").val()))) {
+   $("#student_div").addClass("has-error");
+ }
+ if(!isNaN(parseFloat($("#course").val()))) {
+     $("#course_div").addClass("has-error");
+    }
+ if(isNaN(parseFloat($("#studentGrade").val()))) {
+     $("#grade_div").addClass("has-error");
+ }
+  if(isNaN(parseFloat($("#studentName").val())) && isNaN(parseFloat($("#course").val())) && !isNaN(parseFloat($("#studentGrade").val())) ) {
+      return true;
+  }else {
+      return false;
+  }
+}///////end of data validation
+
+function remove_extra_classes() {
+    $("#student_div, #course_div, #grade_div").removeClass("has-error");
+}////////end of remove extra classes
 
 /**
  * Listen for the document to load and reset the data to the initial state
  */
+
 
 $(document).ready(function () {
     reset();
@@ -166,6 +236,9 @@ $(document).ready(function () {
             source: names
         });
     });
+
+    $("#add").click(addClicked);
+    $("#cancel").click(cancelClicked);
 });
 
 //// TEST DATA FOR AUTOCOMPLETE /////
