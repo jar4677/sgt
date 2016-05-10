@@ -142,6 +142,54 @@ function removeStudent() {
     updateData();
 }
 
+/** sort function*/
+
+function sort() {
+    switch ($(this).attr('id')) {
+        case 'name-col':
+            studentArray.sort(function (a, b) {
+                if (a.name > b.name) {
+                    return 1;
+                }
+                else if (a.name < b.name) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            break;
+        case 'course-col':
+            studentArray.sort(function (a, b) {
+                if (a.course > b.course) {
+                    return 1;
+                }
+                else if (a.course < b.course) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            break;
+        case 'grade-col':
+            studentArray.sort(function (a, b) {
+                if (a.grade < b.grade) {
+                    return 1;
+                }
+                else if (a.grade > b.grade) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+                console.log("something");
+            });
+            break;
+    }
+    updateData();
+}
+
 /**
  * Listen for the document to load and reset the data to the initial state
  */
@@ -150,4 +198,5 @@ $(document).ready(function () {
     reset();
     updateData();
     $('tbody').on('click', '.btn', removeStudent);
+    $('.sort').click(sort);
 });
