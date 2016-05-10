@@ -5,24 +5,21 @@
  * studentArray - global array to hold student objects
  * @type {Array}
  */
-
 var studentArray = [];
 
 /**
  * inputIds - id's of the elements that are used to add students
  * @type {string[]}
  */
-
-var studentName = $("#studentName");
-var course = $("#course");
-var studentGrade = $("#studentGrade");
-var tableBody = $("tbody");
+// var studentName = $("#studentName");
+// var course = $("#course");
+// var studentGrade = $("#studentGrade");
+// var tableBody = $("tbody");
 
 /**
  * addClicked - Event Handler when user clicks the add button
  */
-
-function addClicked(){
+function addClicked() {
     addStudent();
     updateData();
     clearAddStudentForm();
@@ -31,7 +28,6 @@ function addClicked(){
 /**
  * cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
  */
-
 function cancelClicked() {
     clearAddStudentForm();
 }
@@ -41,9 +37,8 @@ function cancelClicked() {
  *
  * @return undefined
  */
-
 function addStudent() {
-    if(dataValidation()) {
+    if (dataValidation()) {
         var student = {
             name: $("#studentName").val(),
             course: $("#course").val(),
@@ -56,8 +51,7 @@ function addStudent() {
 /**
  * clearAddStudentForm - clears out the form values based on inputIds variable
  */
-
-function clearAddStudentForm(){
+function clearAddStudentForm() {
     $("#studentName, #course, #studentGrade").val('');
     $("#studentName").focus();
 }
@@ -66,15 +60,14 @@ function clearAddStudentForm(){
  * calculateAverage - loop through the global student array and calculate average grade and return that value
  * @returns {number}
  */
-
 function calculateAverage() {
-    if (studentArray.length>0) {
+    if (studentArray.length > 0) {
         var total = 0;
         for (var i = 0; i < studentArray.length; i++) {
             total += studentArray[i].grade;
         }
         return Math.round(total / studentArray.length);
-    }else {
+    } else {
         return 0;
     }
 }
@@ -82,12 +75,11 @@ function calculateAverage() {
 /**
  * updateData - centralized function to update the average and call student list update
  */
-
-function updateData(){
+function updateData() {
     var average = calculateAverage();
     $(".avgGrade").text(average);
     updateStudentList();
-
+    
     if (studentArray.length == 0) {
         reset();
     }
@@ -96,10 +88,9 @@ function updateData(){
 /**
  * updateStudentList - loops through global student array and appends each objects data into the student-list-container > list-body
  */
-
 function updateStudentList() {
     $('tbody').html('');
-    for (var i = 0; i < studentArray.length; i++){
+    for (var i = 0; i < studentArray.length; i++) {
         addStudentToDom(studentArray[i]);
     }
 }
@@ -109,17 +100,16 @@ function updateStudentList() {
  * into the .student_list tbody
  * @param studentObj
  */
-
 function addStudentToDom(studentObj) {
     var name = $("<td>").text(studentObj.name);
     var course = $("<td>").text(studentObj.course);
     var grade = $("<td>").text(studentObj.grade);
-
+    
     var del = $("<td>");
     var delBtn = $("<button>").text('Delete').addClass('btn btn-danger').data(studentObj);
-
+    
     var row = $("<tr>");
-
+    
     $(del).append(delBtn);
     $(row).append(name, course, grade, del);
     $("tbody").append(row);
@@ -128,77 +118,86 @@ function addStudentToDom(studentObj) {
 /**
  * reset - resets the application to initial state. Global variables reset, DOM get reset to initial load state
  */
-
 function reset() {
     studentArray = [];
-    $("tbody").html("<h3>User Info Unavailable<h3>");
+    $("tbody").html("<h5>User Info Unavailable<h5>");
 }
-////////////extra idea for validation
-var validation_params = {
-    '#studentName':
-    {
-        datatype_check:'string',
-        length:3
-    },
-    '#course':
-    {
-        datatype_check:'string',
-        length:5
-    },
-    '#grade' :
-    {
-        datatype_check: 'number',
-        length: 1
-    }
 
-};
-
-function validate_tester(test,value){
-    var error_array=[];
-    for(var index in test) {
-        switch (index) {
-            case 'datatype_check':
-                //do datatype check here
-                break;
-            case 'length':
-                //do length check here
-                if(value.length < test[index]){
-                    error_array.push(index);
-                }
-                break;
-
-        }
-    }
-    if(error_array.length>0) {
-        return error_array;
-    }
-    return true;
-}
-/////////////////data validation
+/**
+ * dataValidation - clears inputs of bootstrap classes. validates data from inputs, adding bootstrap classes as
+ * appropriate
+ * @return {boolean}
+ */
 function dataValidation() {
-    remove_extra_classes();
- if (!isNaN(parseFloat($("#studentName").val()))) {
-   $("#student_div").addClass("has-error");
- }
- if(!isNaN(parseFloat($("#course").val()))) {
-     $("#course_div").addClass("has-error");
+    removeExtraClasses();
+    
+    var name = $("#studentName").val();
+    var course = $("#course").val();
+    var grade = $("#studentGrade").val();
+    
+    if (!isNaN(parseFloat(name))) {
+        $("#student_div").addClass("has-error");
     }
- if(isNaN(parseFloat($("#studentGrade").val()))) {
-     $("#grade_div").addClass("has-error");
- }
-  if(isNaN(parseFloat($("#studentName").val())) && isNaN(parseFloat($("#course").val())) && !isNaN(parseFloat($("#studentGrade").val())) ) {
-      return true;
-  }else {
-      return false;
-  }
+    
+    if (!isNaN(parseFloat(course))) {
+        $("#course_div").addClass("has-error");
+    }
+    
+    if (isNaN(parseFloat(grade))) {
+        $("#grade_div").addClass("has-error");
+    }
+    
+    return (isNaN(parseFloat(name)) && isNaN(parseFloat(course)) && !isNaN(parseFloat(grade)));
 }///////end of data validation
 
-function remove_extra_classes() {
+/**
+ * removeExtraClasses - clears class "has-error" from all input fields
+ */
+function removeExtraClasses() {
     $("#student_div, #course_div, #grade_div").removeClass("has-error");
 }////////end of remove extra classes
 
+
+// ////////////extra idea for validation
+// var validation_params = {
+//     '#studentName': {
+//         datatype_check: 'string',
+//         length: 3
+//     },
+//     '#course': {
+//         datatype_check: 'string',
+//         length: 5
+//     },
+//     '#grade': {
+//         datatype_check: 'number',
+//         length: 1
+//     }
+// };
+//
+// function validate_tester(test, value) {
+//     var error_array = [];
+//     for (var index in test) {
+//         switch (index) {
+//             case 'datatype_check':
+//                 //do datatype check here
+//                 break;
+//             case 'length':
+//                 //do length check here
+//                 if (value.length < test[index]) {
+//                     error_array.push(index);
+//                 }
+//                 break;
+//         }
+//     }
+//     if (error_array.length > 0) {
+//         return error_array;
+//     }
+//     return true;
+// }
+
 /**
- * remove student
+ * removeStudent - gets index of the row to be removed. removes corresponding student from studentArray. resets the
+ * list
  * */
 function removeStudent() {
     var row = $(this).parents()[1];
@@ -207,8 +206,9 @@ function removeStudent() {
     updateData();
 }
 
-/** sort function*/
-
+/**
+ * sort - takes the id of the column button to be sorted. sorts array by the appropriate property. resets the list
+ * */
 function sort() {
     switch ($(this).attr('id')) {
         case 'name-col':
@@ -254,25 +254,36 @@ function sort() {
     updateData();
 }
 
+//functions get arrays for autocomplete
+function getCourses() {
+    var courses = [];
+    for (var i = 0; i < testData.length; i++) {
+        if (courses.indexOf(testData[i].course) == -1) {
+            courses.push(testData[i].course);
+        }
+    }
+    return courses;
+}
+
+function getNames() {
+    var names = [];
+    for (var i = 0; i < testData.length; i++) {
+        if (names.indexOf(testData[i].name) == -1) {
+            names.push(testData[i].name);
+        }
+    }
+    return names;
+}
+
 /**
  * Listen for the document to load and reset the data to the initial state
  */
-
-
 $(document).ready(function () {
     reset();
-
-    $("tbody").on('click', '.btn', function () {
-        var row = $(this).parents()[1];
-        var index = $(row).index();
-        studentArray.splice(index, 1);
-        if (studentArray.length == 0){
-            reset();
-        } else {
-            updateStudentList();
-        }
-    });
-
+    updateData();
+    
+    $("tbody").on('click', '.btn', removeStudent);
+    
     $("#get-data").click(function () {
         // $.ajax({
         //     datatype: 'json',
@@ -284,46 +295,28 @@ $(document).ready(function () {
         // })
     });
     
-    $(function() {
+    //functions for jquery ui autocomplete widget
+    $(function () {
         var courses = getCourses();
         $("#course").autocomplete({
             source: courses
         });
     });
-
-    $(function() {
+    
+    $(function () {
         var names = getNames();
         $("#studentName").autocomplete({
             source: names
         });
     });
-
+    
     $("#add").click(addClicked);
     $("#cancel").click(cancelClicked);
+
+    $('.sort').click(sort);
 });
 
 //// TEST DATA FOR AUTOCOMPLETE /////
-
-function getCourses (){
-    var courses = [];
-    for (var i = 0; i < testData.length; i++){
-        if (courses.indexOf(testData[i].course) == -1){
-            courses.push(testData[i].course);
-        }
-    }
-    return courses;
-}
-
-function getNames (){
-    var names = [];
-    for (var i = 0; i < testData.length; i++){
-        if (names.indexOf(testData[i].name) == -1){
-            names.push(testData[i].name);
-        }
-    }
-    return names;
-}
-
 var testData = [
     {
         id: 123456,

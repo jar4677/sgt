@@ -9,9 +9,12 @@
     <script src="script.js"></script>
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
     <style>
-        #get-data {
-            margin-top: 5px;
-        }
+        /*#get-data {*/
+            /*margin-top: 5px;*/
+        /*}*/
+        /*.sort {*/
+            /*cursor: pointer;*/
+        /*}*/
     </style>
 </head>
 <body>
@@ -49,30 +52,35 @@
                    placeholder="Student Grade">
         </div>
 
-        <button id="add" type="button" class="btn btn-success">Add</button>
-        <button id="cancel" type="button" class="btn btn-default">Cancel</button>
-        <button type="button" class="btn btn-info" id="get-data">Get Student Data</button>
+        <div class="form-group">
+        <button id="add" type="button" class="btn btn-success form-group">Add</button>
+        <button id="cancel" type="button" class="btn btn-default form-group">Cancel</button>
+        </div>
 
+        <button type="button" class="btn btn-info" id="get-data">Get Student Data</button>
     </div>
     <div class="student-list-container col-xs-12 col-sm-9 pull-left">
         <table class="student-list table">
             <thead>
             <tr>
                 <th>Student Name
-                    <button type="button" class="sort btn btn-success-outline btn-sm" id="name-col">&darr;</button>
+                    <span class="glyphicon glyphicon-chevron-down sort btn" id="name-col"></span>
                 </th>
                 <th>Student Course
-                    <button type="button" class="sort btn btn-success-outline btn-sm" id="course-col">&darr;</button>
+                    <span class="glyphicon glyphicon-chevron-down sort btn" id="course-col"></span>
                 </th>
                 <th>Student Grade
-                    <button type="button" class="sort btn btn-success-outline btn-sm" id="grade-col">&darr;</button>
+                    <span class="glyphicon glyphicon-chevron-down sort btn" id="grade-col"></span>
                 </th>
-                <th>Operations</th>
+                <th>Operations
+                    <span class="glyphicon glyphicon-remove btn"></span>
+                </th>
             </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
+        <h3 id="unavailable">User Info Unavailable<h3>
     </div>
 </div>
 </body>
