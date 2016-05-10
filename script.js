@@ -140,5 +140,98 @@ $(document).ready(function () {
         } else {
             updateStudentList();
         }
-    })
+    });
+
+    $("#get-data").click(function () {
+        // $.ajax({
+        //     datatype: 'json',
+        //     url: 's-apis.learningfuze.com/sgt/get',
+        //     api_key: '',
+        //     success: function (result) {
+        //         console.log(result);
+        //     }
+        // })
+    });
+    
+    $(function() {
+        var courses = getCourses();
+        $("#course").autocomplete({
+            source: courses
+        });
+    });
 });
+
+//// TEST DATA FOR AUTOCOMPLETE /////
+
+function getCourses (){
+    var courses = [];
+    for (var i = 0; i < testData.length; i++){
+        if (courses.indexOf(testData[i].course) == -1){
+            courses.push(testData[i].course);
+        }
+    }
+    return courses;
+}
+
+var testData = [
+    {
+        id: 123456,
+        name: 'Jon Rasmussen',
+        course: 'JavaScript',
+        grade: 100
+    },
+    {
+        id: 123457,
+        name: 'Pearl Mozafarian',
+        course: 'HTML',
+        grade: 100
+    },
+    {
+        id: 123458,
+        name: "Erika O\'Neal",
+        course: CSS,
+        grade: 100
+    },
+    {
+        id: 123459,
+        name: 'John Doe',
+        course: 'Underwater Basketweaving',
+        grade: 54
+    },
+    {
+        id: 123460,
+        name: 'Alan Smithee',
+        course: 'Film Making',
+        grade: 10
+    },
+    {
+        id: 123461,
+        name: 'Barack Obama',
+        course: 'Presidenting',
+        grade: 50
+    },
+    {
+        id: 123462,
+        name: 'Cristen Rasmussen',
+        course: 'Teaching',
+        grade: 100
+    },
+    {
+        id: 123463,
+        name: 'Donald Drumpf',
+        course: 'Human Decency',
+        grade: 0
+    },
+    {
+        id: 123464,
+        name: 'Dan Paschal',
+        course: 'Teaching',
+        grade: 100
+    },
+    {
+        id: 123465,
+        name: 'Josh Hall',
+        course: 'Muggle Studies',
+        grade: 84
+    }
+];
