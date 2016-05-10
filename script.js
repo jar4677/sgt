@@ -44,6 +44,25 @@ function addStudent() {
             course: $("#course").val(),
             grade: parseInt($("#studentGrade").val())
         };
+
+        $.ajax({
+            dataType: 'json',
+            method: 'post',
+            url: 'http://s-apis.learningfuze.com/sgt/create',
+            data: {
+                'api_key': '51RgIfcfBz',
+                'name': student.name,
+                'course': student.course,
+                'grade': student.grade
+            },
+            success: function (result) {
+                student.id = result.new_id;
+            },
+            errors: function (result) {
+                console.log(result);
+            }
+        });
+
         studentArray.push(student);
     }
 }
@@ -207,8 +226,26 @@ function removeExtraClasses() {
 function removeStudent() {
     var row = $(this).parents()[1];
     var index = $(row).index();
+    var studentId = studentArray[index].id;
+    console.log(studentId);
     studentArray.splice(index, 1);
     updateData();
+
+    $.ajax({
+        dataType: 'json',
+        method: 'post',
+        url: 'http://s-apis.learningfuze.com/sgt/delete',
+        data: {
+            'api_key': '51RgIfcfBz',
+            'student_id': studentId
+        },
+        success: function (result) {
+            console.log(result);
+        },
+        errors: function (result) {
+            console.log(result);
+        }
+    });
 }
 
 /**
@@ -263,9 +300,9 @@ function sort() {
 function updateCourseOptions() {
     $("#course-list").html('');
     var courses = [];
-    for (var i = 0; i < testData.length; i++) {
-        if (courses.indexOf(testData[i].course) == -1) {
-            courses.push(testData[i].course);
+    for (var i = 0; i < studentArray.length; i++) {
+        if (courses.indexOf(studentArray[i].course) == -1) {
+            courses.push(studentArray[i].course);
         }
     }
     for (var j = 0; j < courses.length; j++){
@@ -277,9 +314,9 @@ function updateCourseOptions() {
 function updateNameOptions() {
     $("#student-list").html('');
     var names = [];
-    for (var i = 0; i < testData.length; i++) {
-        if (names.indexOf(testData[i].name) == -1) {
-            names.push(testData[i].name);
+    for (var i = 0; i < studentArray.length; i++) {
+        if (names.indexOf(studentArray[i].name) == -1) {
+            names.push(studentArray[i].name);
         }
     }
     for (var j = 0; j < names.length; j++){
@@ -287,6 +324,10 @@ function updateNameOptions() {
         $("#student-list").append(option);
     }
 }
+
+/**
+ *
+ */
 
 /**
  * Listen for the document to load and reset the data to the initial state
@@ -299,11 +340,14 @@ $(document).ready(function () {
     
     $("#get-data").click(function () {
         $.ajax({
-            datatype: 'json',
-            url: 's-apis.learningfuze.com/sgt/get',
-            api_key: '51RgIfcfBz',
+            dataType: 'json',
+            method: 'post',
+            url: 'http://s-apis.learningfuze.com/sgt/get',
+            data: {'api_key': '51RgIfcfBz'},
             success: function (result) {
-                console.log(result);
+                studentArray = result.data;
+                console.log(result.data);
+                updateData();
             }
         })
     });
@@ -313,67 +357,3 @@ $(document).ready(function () {
 
     $('.sort').click(sort);
 });
-
-//// TEST DATA FOR AUTOCOMPLETE /////
-var testData = [
-    {
-        id: 123456,
-        name: 'Jon Rasmussen',
-        course: 'JavaScript',
-        grade: 100
-    },
-    {
-        id: 123457,
-        name: 'Pearl Mozafarian',
-        course: 'HTML',
-        grade: 100
-    },
-    {
-        id: 123458,
-        name: "Erika O\'Neal",
-        course: 'CSS',
-        grade: 100
-    },
-    {
-        id: 123459,
-        name: 'John Doe',
-        course: 'Underwater Basketweaving',
-        grade: 54
-    },
-    {
-        id: 123460,
-        name: 'Alan Smithee',
-        course: 'Film Making',
-        grade: 10
-    },
-    {
-        id: 123461,
-        name: 'Barack Obama',
-        course: 'Presidenting',
-        grade: 50
-    },
-    {
-        id: 123462,
-        name: 'Cristen Rasmussen',
-        course: 'Teaching',
-        grade: 100
-    },
-    {
-        id: 123463,
-        name: 'Donald Drumpf',
-        course: 'Human Decency',
-        grade: 0
-    },
-    {
-        id: 123464,
-        name: 'Dan Paschal',
-        course: 'Teaching',
-        grade: 100
-    },
-    {
-        id: 123465,
-        name: 'Josh Hall',
-        course: 'Muggle Studies',
-        grade: 84
-    }
-];
