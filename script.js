@@ -67,10 +67,14 @@ function clearAddStudentForm(){
 
 function calculateAverage() {
     var total = 0;
+    var average = 0;
+
     for (var i = 0; i < studentArray.length; i++){
         total += studentArray[i].grade;
+        average = Math.round(total / studentArray.length);
     }
-    return Math.round(total / studentArray.length);
+    
+    return average;
 }
 
 /**
@@ -81,6 +85,10 @@ function updateData(){
     var average = calculateAverage();
     $(".avgGrade").text(average);
     updateStudentList();
+
+    if (studentArray.length == 0) {
+        reset();
+    }
 }
 
 /**
@@ -125,20 +133,21 @@ function reset() {
 }
 
 /**
+ * remove student
+ * */
+function removeStudent() {
+    var row = $(this).parents()[1];
+    var index = $(row).index();
+    studentArray.splice(index, 1);
+    updateData();
+}
+
+/**
  * Listen for the document to load and reset the data to the initial state
  */
 
 $(document).ready(function () {
     reset();
-
-    $("tbody").on('click', '.btn', function () {
-        var row = $(this).parents()[1];
-        var index = $(row).index();
-        studentArray.splice(index, 1);
-        if (studentArray.length == 0){
-            reset();
-        } else {
-            updateStudentList();
-        }
-    })
+    updateData();
+    $('tbody').on('click', '.btn', removeStudent);
 });

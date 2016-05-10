@@ -6,6 +6,11 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
+    <style>
+        #get-data {
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="container col-sm-offset-0 col-md-offset-1 col-sm-12 col-md-10">
@@ -43,6 +48,7 @@
         </div>
         <button type="button" class="btn btn-success" onclick="addClicked()">Add</button>
         <button type="button" class="btn btn-default" onclick="cancelClicked()">Cancel</button>
+        <button type="button" class="btn btn-info" id="get-data">Get Student Data</button>
     </div>
     <div class="student-list-container col-xs-12 col-sm-9 pull-left">
         <table class="student-list table">
