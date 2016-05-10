@@ -87,6 +87,10 @@ function updateData(){
     var average = calculateAverage();
     $(".avgGrade").text(average);
     updateStudentList();
+
+    if (studentArray.length == 0) {
+        reset();
+    }
 }
 
 /**
@@ -192,6 +196,63 @@ function dataValidation() {
 function remove_extra_classes() {
     $("#student_div, #course_div, #grade_div").removeClass("has-error");
 }////////end of remove extra classes
+
+/**
+ * remove student
+ * */
+function removeStudent() {
+    var row = $(this).parents()[1];
+    var index = $(row).index();
+    studentArray.splice(index, 1);
+    updateData();
+}
+
+/** sort function*/
+
+function sort() {
+    switch ($(this).attr('id')) {
+        case 'name-col':
+            studentArray.sort(function (a, b) {
+                if (a.name > b.name) {
+                    return 1;
+                }
+                else if (a.name < b.name) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            break;
+        case 'course-col':
+            studentArray.sort(function (a, b) {
+                if (a.course > b.course) {
+                    return 1;
+                }
+                else if (a.course < b.course) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            break;
+        case 'grade-col':
+            studentArray.sort(function (a, b) {
+                if (a.grade < b.grade) {
+                    return 1;
+                }
+                else if (a.grade > b.grade) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            break;
+    }
+    updateData();
+}
 
 /**
  * Listen for the document to load and reset the data to the initial state

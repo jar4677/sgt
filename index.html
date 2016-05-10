@@ -8,6 +8,11 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
+    <style>
+        #get-data {
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="container col-sm-offset-0 col-md-offset-1 col-sm-12 col-md-10">
@@ -43,16 +48,25 @@
             <input type="text" class="form-control" name="studentGrade" id="studentGrade"
                    placeholder="Student Grade">
         </div>
-        <button id="add" type="button" class="btn btn-success" onclick="">Add</button>
-        <button id="cancel" type="button" class="btn btn-default" onclick="">Cancel</button>
+
+        <button id="add" type="button" class="btn btn-success">Add</button>
+        <button id="cancel" type="button" class="btn btn-default">Cancel</button>
+        <button type="button" class="btn btn-info" id="get-data">Get Student Data</button>
+
     </div>
     <div class="student-list-container col-xs-12 col-sm-9 pull-left">
         <table class="student-list table">
             <thead>
             <tr>
-                <th>Student Name</th>
-                <th>Student Course</th>
-                <th>Student Grade</th>
+                <th>Student Name
+                    <button type="button" class="sort btn btn-success-outline btn-sm" id="name-col">&darr;</button>
+                </th>
+                <th>Student Course
+                    <button type="button" class="sort btn btn-success-outline btn-sm" id="course-col">&darr;</button>
+                </th>
+                <th>Student Grade
+                    <button type="button" class="sort btn btn-success-outline btn-sm" id="grade-col">&darr;</button>
+                </th>
                 <th>Operations</th>
             </tr>
             </thead>
