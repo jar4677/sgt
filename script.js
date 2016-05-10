@@ -275,7 +275,7 @@ function updateCourseOptions() {
 }
 
 function updateNameOptions() {
-    $("#student-list").html();
+    $("#student-list").html('');
     var names = [];
     for (var i = 0; i < testData.length; i++) {
         if (names.indexOf(testData[i].name) == -1) {
@@ -298,14 +298,14 @@ $(document).ready(function () {
     $("tbody").on('click', '.btn', removeStudent);
     
     $("#get-data").click(function () {
-        // $.ajax({
-        //     datatype: 'json',
-        //     url: 's-apis.learningfuze.com/sgt/get',
-        //     api_key: '',
-        //     success: function (result) {
-        //         console.log(result);
-        //     }
-        // })
+        $.ajax({
+            datatype: 'json',
+            url: 's-apis.learningfuze.com/sgt/get',
+            api_key: '51RgIfcfBz',
+            success: function (result) {
+                console.log(result);
+            }
+        })
     });
 
     $("#add").click(addClicked);
