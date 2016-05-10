@@ -23,28 +23,28 @@
     </div>
     <div class="student-add-form pull-right col-xs-12 col-sm-3">
         <h4>Add Student</h4>
-        <div class="form-group input-group ui-widget">
+        <div id="student_div" class="form-group input-group ui-widget">
             <span class="input-group-addon">
-                <span class="glyphicon glyphicon-user"></span>
+                <span id="student_glyphicon" class="glyphicon glyphicon-user"></span>
             </span>
             <input type="text" class="form-control" name="studentName" id="studentName" placeholder="Student Name">
         </div>
-        <div class="form-group input-group ui-widget">
+        <div id="course_div" class="form-group input-group ui-widget">
             <span class="input-group-addon">
-                <span class="glyphicon glyphicon-list-alt"></span>
+                <span id="course_glyphicon" class="glyphicon glyphicon-list-alt"></span>
             </span>
             <input type="text" class="form-control" name="course" id="course"
                    placeholder="Student Course">
         </div>
-        <div class="form-group input-group">
+        <div id="grade_div" class="form-group input-group">
             <span class="input-group-addon">
-                <span class="glyphicon glyphicon-education"></span>
+                <span id="grade_glyphicon" class="glyphicon glyphicon-education"></span>
             </span>
             <input type="text" class="form-control" name="studentGrade" id="studentGrade"
                    placeholder="Student Grade">
         </div>
-        <button type="button" class="btn btn-success" onclick="addClicked()">Add</button>
-        <button type="button" class="btn btn-default" onclick="cancelClicked()">Cancel</button>
+        <button id="add" type="button" class="btn btn-success" onclick="">Add</button>
+        <button id="cancel" type="button" class="btn btn-default" onclick="">Cancel</button>
     </div>
     <div class="student-list-container col-xs-12 col-sm-9 pull-left">
         <table class="student-list table">
@@ -63,4 +63,3 @@
 </div>
 </body>
 </html>
-
