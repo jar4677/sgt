@@ -5,12 +5,83 @@
  * studentArray - global array to hold student objects
  * @type {Array}
  */
-var studentArray = [];
+
+var sgt = {
+    index: 0,
+    displayArray: [],
+    studentArray: []
+};
+
+function next(){
+    //put current displayArray back into studentArray
+    var tempArray = sgt.studentArray.splice(sgt.index);
+    sgt.studentArray = sgt.studentArray.concat(sgt.displayArray, tempArray);
+    sgt.index += sgt.displayArray.length;
+    sgt.displayArray = [];
+
+    //set the number of items to splice
+    var numberOfItems = 10;
+    //reduce the number of items if there aren't enough
+    if (((sgt.studentArray.length - 1) - sgt.index) < 10){
+        numberOfItems = (sgt.studentArray.length - 1) - sgt.index;
+    }
+
+    sgt.displayArray = sgt.studentArray.splice(sgt.index, numberOfItems);
+    updateData();
+
+    if(sgt.index > 0){
+        $("#prev").show();
+    } else {
+        $("#prev").hide();
+    }
+
+    if((sgt.studentArray.length - sgt.index) < 10){
+        $("#next").hide();
+    } else {
+        $("#next").show();
+    }
+}
+
+function prev(){
+    //put current displayArray back into studentArray
+    var tempArray = sgt.studentArray.splice(sgt.index);
+    sgt.studentArray = sgt.studentArray.concat(sgt.displayArray, tempArray);
+    //set index
+    if(sgt.index >= 10){
+        sgt.index -= 10;
+    } else {
+        sgt.index = 0;
+    }
+    sgt.displayArray = [];
+
+    //set the number of items to splice
+    var numberOfItems = 10;
+    //reduce the number of items if there aren't enough
+    if (((sgt.studentArray.length - 1) - sgt.index) < 10){
+        numberOfItems = (sgt.studentArray.length - 1) - sgt.index;
+    }
+
+    sgt.displayArray = sgt.studentArray.splice(sgt.index, numberOfItems);
+    updateData();
+
+    if(sgt.index > 0){
+        $("#prev").show();
+    } else {
+        $("#prev").hide();
+    }
+
+    if((sgt.studentArray.length - sgt.index) < 10){
+        $("#next").hide();
+    } else {
+        $("#next").show();
+    }
+}
 
 /**
  * inputIds - id's of the elements that are used to add students
  * @type {string[]}
  */
+//TODO wasn't working. may revisit
 // var studentName = $("#studentName");
 // var course = $("#course");
 // var studentGrade = $("#studentGrade");
@@ -24,9 +95,10 @@ var studentArray = [];
 /**
  * cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
  */
-function cancelClicked() {
-    clearAddStudentForm();
-}
+//redundant
+// function cancelClicked() {
+//     clearAddStudentForm();
+// }
 
 /**
  * addStudent - creates a student objects based on input fields in the form and adds the object to global student array
@@ -57,7 +129,7 @@ function addStudent() {
                     $("#modal_text").text(result.errors[0]);
                 } else {
                     student.id = result.new_id;
-                    studentArray.push(student);
+                    sgt.studentArray.push(student);
                     updateData();
                     clearAddStudentForm();
                 }
@@ -79,12 +151,15 @@ function clearAddStudentForm() {
  * @returns {number}
  */
 function calculateAverage() {
-    if (studentArray.length > 0) {
+    if ((sgt.studentArray.length + sgt.displayArray.length) > 0) {
         var total = 0;
-        for (var i = 0; i < studentArray.length; i++) {
-            total += studentArray[i].grade;
+        for (var i = 0; i < sgt.studentArray.length; i++) {
+            total += sgt.studentArray[i].grade;
         }
-        return Math.round(total / studentArray.length);
+        for (var j = 0; j < sgt.displayArray.length; j++) {
+            total += sgt.displayArray[j].grade;
+        }
+        return Math.round(total / (sgt.studentArray.length + sgt.displayArray.length));
     } else {
         return 0;
     }
@@ -100,7 +175,9 @@ function updateData() {
     updateCourseOptions();
     updateNameOptions();
     $("#unavailable").hide();
-    if (studentArray.length == 0) {
+    
+    //TODO check for compatability with next/previous
+    if (sgt.studentArray.length == 0) {
         reset();
     }
 }
@@ -110,8 +187,8 @@ function updateData() {
  */
 function updateStudentList() {
     $('tbody').html('');
-    for (var i = 0; i < studentArray.length; i++) {
-        addStudentToDom(studentArray[i]);
+    for (var i = 0; i < sgt.displayArray.length; i++) {
+        addStudentToDom(sgt.displayArray[i]);
     }
 }
 
@@ -139,8 +216,12 @@ function addStudentToDom(studentObj) {
  * reset - resets the application to initial state. Global variables reset, DOM get reset to initial load state
  */
 function reset() {
-    studentArray = [];
+    sgt.studentArray = [];
+    sgt.displayArray = [];
+    sgt.index = 0;
     $("#unavailable").show();
+    $("#next").hide();
+    $("#prev").hide();
 }
 
 /**
@@ -225,7 +306,7 @@ function removeExtraClasses() {
 function removeStudent() {
     var row = $(this).parents()[1];
     var index = $(row).index();
-    var studentId = studentArray[index].id;
+    var studentId = sgt.displayArray[index].id;
 
     $.ajax({
         dataType: 'json',
@@ -241,7 +322,7 @@ function removeStudent() {
                 $("#myModal").modal("show");
                 $("#modal_text").text(result.errors[0]);
             } else {
-                studentArray.splice(index, 1);
+                sgt.displayArray.splice(index, 1);
                 updateData();
             }
         }
@@ -252,9 +333,14 @@ function removeStudent() {
  * sort - takes the id of the column button to be sorted. sorts array by the appropriate property. resets the list
  * */
 function sort(object) {
+    var tempArray = sgt.studentArray.splice(sgt.index);
+    sgt.studentArray = sgt.studentArray.concat(sgt.displayArray, tempArray);
+    sgt.index = 0;
+    sgt.displayArray = [];
+
     switch ($(object).attr('column')) {
         case 'name-col':
-            studentArray.sort(function (a, b) {
+            sgt.studentArray.sort(function (a, b) {
                 if (a.name > b.name) {
                     return 1;
                 }
@@ -267,7 +353,7 @@ function sort(object) {
             });
             break;
         case 'course-col':
-            studentArray.sort(function (a, b) {
+            sgt.studentArray.sort(function (a, b) {
                 if (a.course > b.course) {
                     return 1;
                 }
@@ -280,7 +366,7 @@ function sort(object) {
             });
             break;
         case 'grade-col':
-            studentArray.sort(function (a, b) {
+            sgt.studentArray.sort(function (a, b) {
                 if (a.grade < b.grade) {
                     return 1;
                 }
@@ -294,13 +380,18 @@ function sort(object) {
             break;
     }
     updateData();
+    next();
 }
 
 function sort_reverse(object) {
-    console.log('fired');
+    var tempArray = sgt.studentArray.splice(sgt.index);
+    sgt.studentArray = sgt.studentArray.concat(sgt.displayArray, tempArray);
+    sgt.index = 0;
+    sgt.displayArray = [];
+
     switch ($(object).attr('column')) {
         case 'name-col':
-            studentArray.sort(function (a, b) {
+            sgt.studentArray.sort(function (a, b) {
                 if (a.name < b.name) {
                     return 1;
                 }
@@ -313,7 +404,7 @@ function sort_reverse(object) {
             });
             break;
         case 'course-col':
-            studentArray.sort(function (a, b) {
+            sgt.studentArray.sort(function (a, b) {
                 if (a.course < b.course) {
                     return 1;
                 }
@@ -326,7 +417,7 @@ function sort_reverse(object) {
             });
             break;
         case 'grade-col':
-            studentArray.sort(function (a, b) {
+            sgt.studentArray.sort(function (a, b) {
                 if (a.grade > b.grade) {
                     return 1;
                 }
@@ -340,15 +431,21 @@ function sort_reverse(object) {
             break;
     }
     updateData();
+    next();
 }
 
 //functions get arrays for autocomplete
 function updateCourseOptions() {
     $("#course-list").html('');
     var courses = [];
-    for (var i = 0; i < studentArray.length; i++) {
-        if (courses.indexOf(studentArray[i].course) == -1) {
-            courses.push(studentArray[i].course);
+    for (var i = 0; i < sgt.studentArray.length; i++) {
+        if (courses.indexOf(sgt.studentArray[i].course) == -1) {
+            courses.push(sgt.studentArray[i].course);
+        }
+    }
+    for (var k = 0; k < sgt.displayArray.length; k++) {
+        if (courses.indexOf(sgt.displayArray[k].course) == -1) {
+            courses.push(sgt.displayArray[k].course);
         }
     }
     for (var j = 0; j < courses.length; j++){
@@ -360,9 +457,14 @@ function updateCourseOptions() {
 function updateNameOptions() {
     $("#student-list").html('');
     var names = [];
-    for (var i = 0; i < studentArray.length; i++) {
-        if (names.indexOf(studentArray[i].name) == -1) {
-            names.push(studentArray[i].name);
+    for (var i = 0; i < sgt.studentArray.length; i++) {
+        if (names.indexOf(sgt.studentArray[i].name) == -1) {
+            names.push(sgt.studentArray[i].name);
+        }
+    }
+    for (var k = 0; k < sgt.displayArray.length; k++) {
+        if (names.indexOf(sgt.displayArray[k].name) == -1) {
+            names.push(sgt.displayArray[k].name);
         }
     }
     for (var j = 0; j < names.length; j++){
@@ -387,9 +489,10 @@ $(document).ready(function () {
             url: 'http://s-apis.learningfuze.com/sgt/get',
             data: {'api_key': '51RgIfcfBz'},
             success: function (result) {
-                studentArray = result.data;
-                console.log(result.data);
+                reset();
+                sgt.studentArray = result.data;
                 updateData();
+                next();
                 if (!result.success) {
                     $("#myModal").modal("show");
                     $("#modal_text").text(result.errors[0]);
@@ -399,8 +502,9 @@ $(document).ready(function () {
     });
 
     $("#add").click(addStudent);
-    $("#cancel").click(cancelClicked);
+    $("#cancel").click(clearAddStudentForm());
 
+    //TODO: consolidate sort functions
     $('.sort-reverse').hide();
     $('.sort').click(function() {
 
@@ -408,10 +512,13 @@ $(document).ready(function () {
         $(this).siblings(0).show();
         $(this).hide();
     });
-    //TODO: consolidate sort functions
+
     $('.sort-reverse').click(function() {
         sort_reverse(this);
         $(this).siblings(0).show();
         $(this).hide();
     });
+
+    $("#prev").click(prev);
+    $("#next").click(next);
 });
