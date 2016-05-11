@@ -128,11 +128,12 @@ function addStudentToDom(studentObj) {
     var grade = $("<td>").text(studentObj.grade);
     
     var del = $("<td>");
-    var delBtn = $("<button>").text('Delete').addClass('btn btn-danger');
+    var infoBtn = $("<button>").text('Info').addClass('btn btn-primary info');
+    var delBtn = $("<button>").text('Delete').addClass('btn btn-danger delete col-xs-offset-1');
     
     var row = $("<tr>");
-    
-    $(del).append(delBtn);
+
+    $(del).append(infoBtn, delBtn);
     $(row).append(name, course, grade, del);
     $("tbody").append(row);
 }
@@ -229,8 +230,7 @@ function removeStudent() {
     var index = $(row).index();
     var studentId = studentArray[index].id;
     console.log(studentId);
-    studentArray.splice(index, 1);
-    updateData();
+
 
     $.ajax({
         dataType: 'json',
@@ -245,6 +245,9 @@ function removeStudent() {
             if (!result.success) {
                 $("#myModal").modal("show");
                 $("#modal_text").text(result.errors[0]);
+            }else {
+                studentArray.splice(index, 1);
+                updateData();
             }
         }
     });
@@ -384,7 +387,7 @@ $(document).ready(function () {
     reset();
     updateData();
     
-    $("tbody").on('click', '.btn', removeStudent);
+    $("tbody").on('click', '.delete', removeStudent);
     
     $("#get-data").click(function () {
         $.ajax({
