@@ -19,11 +19,7 @@ var studentArray = [];
 /**
  * addClicked - Event Handler when user clicks the add button
  */
-function addClicked() {
-    addStudent();
-    updateData();
-    clearAddStudentForm();
-}
+//consolidated into addStudent ajax call
 
 /**
  * cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
@@ -56,15 +52,17 @@ function addStudent() {
                 'grade': student.grade
             },
             success: function (result) {
-                student.id = result.new_id;
                 if (!result.success) {
                     $("#myModal").modal("show");
                     $("#modal_text").text(result.errors[0]);
+                } else {
+                    student.id = result.new_id;
+                    studentArray.push(student);
+                    updateData();
+                    clearAddStudentForm();
                 }
             }
         });
-
-        studentArray.push(student);
     }
 }
 
@@ -112,7 +110,6 @@ function updateData() {
  */
 function updateStudentList() {
     $('tbody').html('');
-    
     for (var i = 0; i < studentArray.length; i++) {
         addStudentToDom(studentArray[i]);
     }
@@ -229,9 +226,6 @@ function removeStudent() {
     var row = $(this).parents()[1];
     var index = $(row).index();
     var studentId = studentArray[index].id;
-    console.log(studentId);
-    studentArray.splice(index, 1);
-    updateData();
 
     $.ajax({
         dataType: 'json',
@@ -246,6 +240,9 @@ function removeStudent() {
             if (!result.success) {
                 $("#myModal").modal("show");
                 $("#modal_text").text(result.errors[0]);
+            } else {
+                studentArray.splice(index, 1);
+                updateData();
             }
         }
     });
@@ -401,7 +398,7 @@ $(document).ready(function () {
         })
     });
 
-    $("#add").click(addClicked);
+    $("#add").click(addStudent);
     $("#cancel").click(cancelClicked);
 
     $('.sort-reverse').hide();
