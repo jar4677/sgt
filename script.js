@@ -127,7 +127,7 @@ function addStudentToDom(studentObj) {
     var grade = $("<td>").text(studentObj.grade);
     
     var del = $("<td>");
-    var delBtn = $("<button>").text('Delete').addClass('btn btn-danger').data(studentObj);
+    var delBtn = $("<button>").text('Delete').addClass('btn btn-danger');
     
     var row = $("<tr>");
     
@@ -251,8 +251,8 @@ function removeStudent() {
 /**
  * sort - takes the id of the column button to be sorted. sorts array by the appropriate property. resets the list
  * */
-function sort() {
-    switch ($(this).attr('id')) {
+function sort(object) {
+    switch ($(object).attr('column')) {
         case 'name-col':
             studentArray.sort(function (a, b) {
                 if (a.name > b.name) {
@@ -285,6 +285,52 @@ function sort() {
                     return 1;
                 }
                 else if (a.grade > b.grade) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            break;
+    }
+    updateData();
+}
+
+function sort_reverse(object) {
+    console.log('fired');
+    switch ($(object).attr('column')) {
+        case 'name-col':
+            studentArray.sort(function (a, b) {
+                if (a.name < b.name) {
+                    return 1;
+                }
+                else if (a.name > b.name) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            break;
+        case 'course-col':
+            studentArray.sort(function (a, b) {
+                if (a.course < b.course) {
+                    return 1;
+                }
+                else if (a.course > b.course) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            break;
+        case 'grade-col':
+            studentArray.sort(function (a, b) {
+                if (a.grade > b.grade) {
+                    return 1;
+                }
+                else if (a.grade < b.grade) {
                     return -1;
                 }
                 else {
@@ -355,5 +401,17 @@ $(document).ready(function () {
     $("#add").click(addClicked);
     $("#cancel").click(cancelClicked);
 
-    $('.sort').click(sort);
+    $('.sort-reverse').hide();
+    $('.sort').click(function() {
+
+        sort(this);
+        $(this).siblings(0).show();
+        $(this).hide();
+    });
+    //TODO: consolidate sort functions
+    $('.sort-reverse').click(function() {
+        sort_reverse(this);
+        $(this).siblings(0).show();
+        $(this).hide();
+    });
 });
