@@ -241,11 +241,10 @@ function removeStudent() {
         },
         success: function (result) {
             console.log(result);
-        },
-        errors: function (result) {
-            var modal = $("<div>", {class: "modal-content"}).append($("<div>", {class : "modal-header"}).append($("<button>", {class: "close", "data-dismiss": "modal", text : "&times;"})));
-            $(body).append(modal);
-            console.log(result);
+            if (!result.success) {
+                $("#myModal").modal("show");
+                $("#modal_text").text(result.errors[0]);
+            }
         }
     });
 }
