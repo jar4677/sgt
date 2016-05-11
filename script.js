@@ -241,9 +241,10 @@ function removeStudent() {
         },
         success: function (result) {
             console.log(result);
-        },
-        errors: function (result) {
-            console.log(result);
+            if (!result.success) {
+                $("#myModal").modal("show");
+                $("#modal_text").text(result.errors[0]);
+            }
         }
     });
 }
@@ -394,6 +395,8 @@ $(document).ready(function () {
                 studentArray = result.data;
                 console.log(result.data);
                 updateData();
+            },
+            error: function () {
             }
         })
     });
