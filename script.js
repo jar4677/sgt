@@ -243,6 +243,8 @@ function removeStudent() {
             console.log(result);
         },
         errors: function (result) {
+            var modal = $("<div>", {class: "modal-content"}).append($("<div>", {class : "modal-header"}).append($("<button>", {class: "close", "data-dismiss": "modal", text : "&times;"})));
+            $(body).append(modal);
             console.log(result);
         }
     });
@@ -348,6 +350,8 @@ $(document).ready(function () {
                 studentArray = result.data;
                 console.log(result.data);
                 updateData();
+            },
+            error: function () {
             }
         })
     });
