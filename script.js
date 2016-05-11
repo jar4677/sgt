@@ -112,6 +112,7 @@ function updateData() {
  */
 function updateStudentList() {
     $('tbody').html('');
+    
     for (var i = 0; i < studentArray.length; i++) {
         addStudentToDom(studentArray[i]);
     }
@@ -372,10 +373,6 @@ function updateNameOptions() {
         $("#student-list").append(option);
     }
 }
-
-/**
- *
- */
 
 /**
  * Listen for the document to load and reset the data to the initial state
