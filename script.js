@@ -57,9 +57,10 @@ function addStudent() {
             },
             success: function (result) {
                 student.id = result.new_id;
-            },
-            errors: function (result) {
-                console.log(result);
+                if (!result.success) {
+                    $("#myModal").modal("show");
+                    $("#modal_text").text(result.errors[0]);
+                }
             }
         });
 
@@ -395,8 +396,10 @@ $(document).ready(function () {
                 studentArray = result.data;
                 console.log(result.data);
                 updateData();
-            },
-            error: function () {
+                if (!result.success) {
+                    $("#myModal").modal("show");
+                    $("#modal_text").text(result.errors[0]);
+                }
             }
         })
     });
