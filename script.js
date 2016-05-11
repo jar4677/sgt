@@ -167,7 +167,7 @@ function dataValidation() {
         course = false;
     }
     
-    if (isNaN(parseFloat(grade)) || grade == '') {
+    if (isNaN(parseFloat(grade)) || grade == '' || (parseFloat(grade))>101 || (parseFloat(grade)) < 0) {
         $("#grade_div").addClass("has-error");
         grade = false;
     }
