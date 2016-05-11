@@ -125,7 +125,7 @@ function addStudent() {
             },
             success: function (result) {
                 if (!result.success) {
-                    $("#myModal").modal("show");
+                    $("#errorModal").modal("show");
                     $("#modal_text").text(result.errors[0]);
                 } else {
                     student.id = result.new_id;
@@ -320,7 +320,7 @@ function removeStudent() {
         success: function (result) {
             console.log(result);
             if (!result.success) {
-                $("#myModal").modal("show");
+                $("#errorModal").modal("show");
                 $("#modal_text").text(result.errors[0]);
             } else {
                 sgt.displayArray.splice(index, 1);
@@ -474,6 +474,17 @@ function updateNameOptions() {
     }
 }
 
+function  showInfo() {
+    var row = $(this).parents()[1];
+    var index = $(row).index();
+    var student = sgt.displayArray[index];
+    console.log("specific stu: ", student);
+    $('#info_h').text(student.name);
+    $('#info_course').text("Course: "+student.course);
+    $('#info_grade').text("Grade: "+student.grade);
+    $("#infoModal").modal("show");
+}
+
 /**
  * Listen for the document to load and reset the data to the initial state
  */
@@ -482,6 +493,7 @@ $(document).ready(function () {
     updateData();
     
     $("tbody").on('click', '.delete', removeStudent);
+    $("tbody").on('click', '.info', showInfo);
     
     $("#get-data").click(function () {
         $.ajax({
@@ -495,7 +507,7 @@ $(document).ready(function () {
                 updateData();
                 next();
                 if (!result.success) {
-                    $("#myModal").modal("show");
+                    $("#errorModal").modal("show");
                     $("#modal_text").text(result.errors[0]);
                 }
             }
