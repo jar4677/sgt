@@ -312,6 +312,7 @@ function removeStudent() {
     $.ajax({
         dataType: 'json',
         method: 'post',
+        cached: false,
         url: 'http://s-apis.learningfuze.com/sgt/delete',
         data: {
             'api_key': '51RgIfcfBz',
@@ -490,13 +491,15 @@ $(document).ready(function () {
             url: 'http://s-apis.learningfuze.com/sgt/get',
             data: {'api_key': '51RgIfcfBz'},
             success: function (result) {
-                reset();
-                sgt.studentArray = result.data;
-                updateData();
-                next();
                 if (!result.success) {
-                    $("#myModal").modal("show");
                     $("#modal_text").text(result.errors[0]);
+                    $("#myModal").modal("show");
+                } else {
+                    console.log(result);
+                    reset();
+                    sgt.studentArray = result.data;
+                    updateData();
+                    next();
                 }
             }
         })
