@@ -42,6 +42,10 @@ function next(){
     }
 }
 
+/**
+ * prev
+ */
+
 function prev(){
     //put current displayArray back into studentArray
     var tempArray = sgt.studentArray.splice(sgt.index);
