@@ -33,18 +33,19 @@
     </div>
     <!--End Main Header-->
     <!--Data Entry Form-->
-    <div class="student-add-form pull-right col-xs-12 col-sm-3">
+    <form action="apis/add_student.php" method="post" class="form-group col-xs-12 col-sm-3 pull-right" id="entry-form">
         <h4>Add Student</h4>
-        <div id="student_div" class="form-group input-group">
+        <div id="student_div" class="input-group">
             <span class="input-group-addon">
                 <span id="student_glyphicon" class="glyphicon glyphicon-user"></span>
             </span>
-            <input type="text" class="form-control" name="studentName" id="studentName" list="student-list"
+            <input type="text" class="form-control" name="name" id="studentName" list="student-list"
                    placeholder="Student Name" ng-model="mc.newName">
             <datalist id="student-list">
             </datalist>
         </div>
-        <div id="course_div" class="form-group input-group">
+        <br>
+        <div id="course_div" class="input-group">
             <span class="input-group-addon">
                 <span id="course_glyphicon" class="glyphicon glyphicon-list-alt"></span>
             </span>
@@ -53,21 +54,19 @@
             <datalist id="course-list">
             </datalist>
         </div>
-        <div id="grade_div" class="form-group input-group">
+        <br>
+        <div id="grade_div" class="input-group">
             <span class="input-group-addon">
                 <span id="grade_glyphicon" class="glyphicon glyphicon-education"></span>
             </span>
-            <input type="text" class="form-control" name="studentGrade" id="studentGrade"
+            <input type="text" class="form-control" name="grade" id="studentGrade"
                    placeholder="Student Grade" ng-model="mc.newGrade">
         </div>
-
-        <div class="form-group">
+        <br>
         <button id="add" type="button" class="btn btn-success" ng-click="mc.addStudent()">Add</button>
         <button id="cancel" type="button" class="btn btn-default">Cancel</button>
-        </div>
-
         <button type="button" class="btn btn-info" id="get-data">Get Student Data</button>
-    </div>
+    </form>
     <!--End Data Entry Form-->
     <!--Report Area-->
     <div class="student-list-container col-xs-12 col-sm-9 pull-left">
