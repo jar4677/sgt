@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html ng-app="sgtApp">
 <head>
     <title>Student Grade Table</title>
     <meta charset="UTF-8">
@@ -12,151 +12,110 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
     <!--Local-->
     <script src="main-angular.js"></script>
-
 </head>
-<body ng-app="sgtApp">
-<div class="container col-md-offset-1 col-md-10 col-sm-12 col-sm-offset-0" ng-controller="mainController as mc">
-    <!--Main Header-->
-    <div class="header">
-        <!-- only show this element when it isn't on mobile -->
-        <h1 class="hidden-xs page-header">Student Grade Table
-            <small class="pull-right">Grade Average :
-                <span class="avgGrade label label-default">{{ mc.averageGrade }}</span>
-            </small>
-        </h1>
-        <!-- only show this element when the user gets to a mobile version -->
-        <h3 class="visible-xs-block">Student Grade Table
-            <small class="pull-right">Grade Average :
-                <span class="avgGrade label label-default">{{ mc.averageGrade }}</span>
-            </small>
-        </h3>
-    </div>
-    <!--End Main Header-->
-    <!--Data Entry Form-->
-    <form action="apis/add_student.php" method="post" class="form-group col-xs-12 col-sm-3 pull-right" id="entry-form">
-        <h4>Add Student</h4>
-        <div id="student_div" class="input-group">
+<body ng-controller="mainController as mc">
+    <div class="container col-md-offset-1 col-md-10 col-sm-12 col-sm-offset-0">
+        <!--Main Header-->
+        <div class="header">
+            <!-- only show this element when it isn't on mobile -->
+            <h1 class="hidden-xs page-header">Student Grade Table
+                <small class="pull-right">Grade Average :
+                    <span class="avgGrade label label-default">{{ mc.averageGrade }}</span>
+                </small>
+            </h1>
+            <!-- only show this element when the user gets to a mobile version -->
+            <h3 class="visible-xs-block">Student Grade Table
+                <small class="pull-right">Grade Average :
+                    <span class="avgGrade label label-default">{{ mc.averageGrade }}</span>
+                </small>
+            </h3>
+        </div>
+        <!--End Main Header-->
+        <!--Data Entry Form-->
+        <form ng-submit="mc.submitForm()" class="form-group col-xs-12 col-sm-3 pull-right" id="entry-form">
+            <h4>Add Student</h4>
+            <div id="student_div" class="input-group">
             <span class="input-group-addon">
                 <span id="student_glyphicon" class="glyphicon glyphicon-user"></span>
             </span>
-            <input type="text" class="form-control" name="name" id="studentName" list="student-list"
-                   placeholder="Student Name" ng-model="mc.newName">
-            <datalist id="student-list">
-            </datalist>
-        </div>
-        <br>
-        <div id="course_div" class="input-group">
+                <input type="text" class="form-control" name="name" id="studentName"
+                       placeholder="Student Name" ng-model="mc.newName">
+            </div>
+            <br>
+            <div id="assignment_div" class="input-group">
             <span class="input-group-addon">
                 <span id="course_glyphicon" class="glyphicon glyphicon-list-alt"></span>
             </span>
-            <input type="text" class="form-control" name="course" id="course" list="course-list"
-                   placeholder="Student Course" ng-model="mc.newCourse">
-            <datalist id="course-list">
-            </datalist>
-        </div>
-        <br>
-        <div id="grade_div" class="input-group">
+                <input type="text" class="form-control" name="course" id="assignment"
+                       placeholder="Assignment" ng-model="mc.newAssignment">
+            </div>
+            <br>
+            <div id="grade_div" class="input-group">
             <span class="input-group-addon">
                 <span id="grade_glyphicon" class="glyphicon glyphicon-education"></span>
             </span>
-            <input type="text" class="form-control" name="grade" id="studentGrade"
-                   placeholder="Student Grade" ng-model="mc.newGrade">
+                <input type="number" class="form-control" name="grade" id="studentGrade"
+                       placeholder="Student Grade" ng-model="mc.newGrade">
+            </div>
+            <br>
+            <button id="add" type="submit" class="btn btn-success">Add</button>
+            <button id="cancel" type="button" class="btn btn-default" ng-click="mc.clearForm()">Cancel</button>
+            <!--<button type="button" class="btn btn-info" id="get-data">Get Student Data</button>-->
+        </form>
+        <!--End Data Entry Form-->
+        <!--Report Area-->
+        <div class="student-list-container col-xs-12 col-sm-9 pull-left">
+            <table class="student-list table">
+                <thead>
+                    <tr>
+                        <th>Student Name
+                            <span class="glyphicon glyphicon-chevron-down sort btn" data-column="name"></span>
+                            <!--<span class="glyphicon glyphicon-chevron-up btn" data-column="name"></span>-->
+                        </th>
+                        <th>Assignment
+                            <span class="glyphicon glyphicon-chevron-down sort btn" data-column="assignment"></span>
+                            <!--<span class="glyphicon glyphicon-chevron-up btn" data-column="assignment"></span>-->
+                        </th>
+                        <th>Student Grade
+                            <span class="glyphicon glyphicon-chevron-down sort btn" data-column="grade"></span>
+                            <!--<span class="glyphicon glyphicon-chevron-up btn" data-column="grade"></span>-->
+                        </th>
+                        <th>Operations
+                            <span class="glyphicon glyphicon-remove btn disabled" style="visibility: hidden"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in mc.data">
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.assignment }}</td>
+                        <td>{{ item.grade }}</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
+                                    data-target="#{{ mc.detailModalId }}" ng-click="mc.getStudentDetail($index)">Details
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ mc.newName }}</td>
+                        <td>{{ mc.newAssignment }}</td>
+                        <td>{{ mc.newGrade}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--<div class="pull-left btn" id="prev"><span class="glyphicon glyphicon-chevron-left"></span> prev 10</div>-->
+            <!--<div class="pull-right btn" id="next">next 10 <span class="glyphicon glyphicon-chevron-right"></span></div>-->
+            <!--<h3 id="unavailable">User Info Unavailable</h3>-->
         </div>
-        <br>
-        <button id="add" type="button" class="btn btn-success" ng-click="mc.addStudent()">Add</button>
-        <button id="cancel" type="button" class="btn btn-default">Cancel</button>
-        <button type="button" class="btn btn-info" id="get-data">Get Student Data</button>
-    </form>
-    <!--End Data Entry Form-->
-    <!--Report Area-->
-    <div class="student-list-container col-xs-12 col-sm-9 pull-left">
-        <table class="student-list table">
-            <thead>
-            <tr>
-                <th>Student Name
-                    <span class="glyphicon glyphicon-chevron-down sort btn" data-column="name-col"></span>
-                    <!--<span class="glyphicon glyphicon-chevron-up btn" data-column="name-col"></span>-->
-                </th>
-                <th>Student Course
-                    <span class="glyphicon glyphicon-chevron-down sort btn" data-column="course-col"></span>
-                    <!--<span class="glyphicon glyphicon-chevron-up btn" data-column="course-col"></span>-->
-                </th>
-                <th>Student Grade
-                    <span class="glyphicon glyphicon-chevron-down sort btn" data-column="grade-col"></span>
-                    <!--<span class="glyphicon glyphicon-chevron-up btn" data-column="grade-col"></span>-->
-                </th>
-                <th>Operations
-                    <span class="glyphicon glyphicon-remove btn disabled" style="visibility: hidden"></span>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="item in mc.data">
-                <td>{{ item.name }}</td>
-                <td>{{ item.course }}</td>
-                <td>{{ item.grade }}</td>
-                <td>
-                    <button type="button" class="btn btn-info">Details</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
-                </td>
-            </tr>
-            <tr>
-                <td>{{ mc.newName }}</td>
-                <td>{{ mc.newCourse }}</td>
-                <td>{{ mc.newGrade}}</td>
-            </tr>
-            </tbody>
-        </table>
-        <!--<div class="pull-left btn" id="prev"><span class="glyphicon glyphicon-chevron-left"></span> prev 10</div>-->
-        <!--<div class="pull-right btn" id="next">next 10 <span class="glyphicon glyphicon-chevron-right"></span></div>-->
-        <!--<h3 id="unavailable">User Info Unavailable</h3>-->
+        <!--End Report Area-->
     </div>
-    <!--End Report Area-->
-</div>
 
-<!--error modal -->
+    <!--detail modal -->
 
-<div class="modal fade" id="errorModal" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title text-danger">ERROR</h3>
-            </div>
-            <div class="modal-body">
-                <h4 id="modal_text" class="text-danger">Some text in the modal.</h4>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<!--info modal -->
-
-<div class="modal fade" id="infoModal" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header text-info">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title" id="info_h"></h3>
-            </div>
-            <div class="modal-body">
-                <h6 id="info_course"></h6>
-                <h6 id="info_grade"></h6>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
+    <modal header="{{ mc.detailStudent.name }}" modal-id="{{ mc.detailModalId }}">
+        <h6 id="info_assignment">Assignment: {{ mc.detailStudent.assignment }}</h6>
+        <h6 id="info_grade">Grade: {{ mc.detailStudent.grade }}</h6>
+    </modal>
 </body>
 </html>

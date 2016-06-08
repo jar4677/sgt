@@ -8,38 +8,56 @@ app.controller('mainController', function ($http, $log) {
     var self = this;
     self.averageGrade = 0;
     self.data = [];
+    self.detailModalId = 'details';
+    self.detailStudent = {};
     
-    //TODO update average grade
-    self.updateAvgGrade = function () {
-        if(self.data.length > 0){
+    //TODO fix get average grade (returns NaN)
+    self.getAvgGrade = function (array) {
+        if(array.length > 0){
             var sum = 0;
             var count = 0;
-            for (var x in self.data){
-                sum += x.grade;
+            for (var x in array){
+                sum += parseInt(x.grade);
                 count++;
             }
-            self.averageGrade = Math.round(sum / count);
-        } else {
-            self.averageGrade = 0;
+            return Math.round(sum / count);
         }
+        return 0;
     };
     
     self.clearForm = function () {
         self.newName = '';
-        self.newCourse = '';
+        self.newAssignment = '';
         self.newGrade = '';
+    };
+
+    self.submitForm = function () {
+        if(self.validateInputs()){
+            self.addStudent();
+        }  else {
+            //TODO better input error handling
+            $log.log('do something else here');
+        }
+    };
+
+    self.validateInputs = function () {
+        return (
+        self.newName.length >= 3 &&
+        self.newAssignment.length >= 3 &&
+        parseInt(self.newGrade) >= 0 &&
+        parseInt(self.newGrade) <= 100)
     };
     
     self.addStudent = function () {
         var student = {
             'name': self.newName,
-            'course': self.newCourse,
+            'assignment': self.newAssignment,
             'grade': self.newGrade
         };
 
         $http({
             url: 'apis/add_student.php',
-            data: student,
+            data: $.param(student),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -48,11 +66,16 @@ app.controller('mainController', function ($http, $log) {
         })
             .then(function (response) {
                 $log.info(response.data);
-                // self.data.push(student);
-                // self.clearForm();
+                self.data.push(student);
+                // self.averageGrade = self.getAvgGrade(self.data);
+                self.clearForm();
             }, function (response) {
                 $log.warn(response);
             });
+    };
+    
+    self.getStudentDetail = function (index) {
+        self.detailStudent = self.data[index];
     };
     
     //TODO send data to server
@@ -66,4 +89,15 @@ app.controller('mainController', function ($http, $log) {
     //TODO sort results by field
     
     //TODO limited number of entries
-});
+})
+    .directive('modal', function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'templates/modal.html',
+            transclude: true,
+            scope: {
+                header: '@',
+                modalId: '@'
+            }
+        }
+    });
