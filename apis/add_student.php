@@ -16,6 +16,7 @@ if(empty($_POST)){
     $name = sanitize($_POST['name']);
     $assignment = sanitize($_POST['assignment']);
     $grade = sanitize($_POST['grade']);
+<<<<<<< HEAD
 
     $query = "INSERT INTO `data` (`name`, `assignment`, `grade`) VALUES ('$name', '$assignment', '$grade')";
     
@@ -26,3 +27,13 @@ if(empty($_POST)){
 	print('unsuccessful');
     };
 };
+=======
+
+    $query = "INSERT INTO `data` (`name`, `assignment`, `grade`) VALUES ('$name', '$assignment', '$grade')";
+
+    print(mysqli_query($conn, $query));
+};
+
+
+
+>>>>>>> 7f96746eeb0b3a29e55002837dade54ebdc0cf2d

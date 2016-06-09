@@ -114,9 +114,10 @@
     </modal>
     <!--edit modal-->
     <modal header="Edit Student" modal-id="{{ mc.editModalId }}">
-        <input type="text" ng-model="mc.detailStudent.name" id="edit-name" disabled><br>
-        <input type="text" ng-model="mc.detailStudent.assignment" id="edit-assignment" disabled><br>
-        <input type="text" ng-model="mc.detailStudent.grade" id="edit-grade" disabled><br>
+        <input type="text" ng-model="mc.detailStudent.name" id="edit-name"><br>
+        <input type="text" ng-model="mc.detailStudent.assignment" id="edit-assignment"><br>
+        <input type="text" ng-model="mc.detailStudent.grade" id="edit-grade"><br>
+        <button type="button" ng-click="mc.updateStudent(mc.detailStudent)" data-dismiss="modal">Save Changes</button>
     </modal>
 </body>
 </html>
