@@ -9,6 +9,7 @@ app.controller('mainController', function ($http, $log) {
     self.averageGrade = 0;
     self.data = [];
     self.detailModalId = 'details';
+    self.editModalId = 'edit';
     self.detailStudent = {};
     
     //TODO fix get average grade (returns NaN)

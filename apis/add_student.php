@@ -1,5 +1,5 @@
 <?php
-//require_once("mysql_connect.php");
+require_once("../cred/mysql_connect_sgt.php");
 
 if(empty($_POST)){
     print('no data');

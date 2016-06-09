@@ -70,15 +70,12 @@
                     <tr>
                         <th>Student Name
                             <span class="glyphicon glyphicon-chevron-down sort btn" data-column="name"></span>
-                            <!--<span class="glyphicon glyphicon-chevron-up btn" data-column="name"></span>-->
                         </th>
                         <th>Assignment
                             <span class="glyphicon glyphicon-chevron-down sort btn" data-column="assignment"></span>
-                            <!--<span class="glyphicon glyphicon-chevron-up btn" data-column="assignment"></span>-->
                         </th>
                         <th>Student Grade
                             <span class="glyphicon glyphicon-chevron-down sort btn" data-column="grade"></span>
-                            <!--<span class="glyphicon glyphicon-chevron-up btn" data-column="grade"></span>-->
                         </th>
                         <th>Operations
                             <span class="glyphicon glyphicon-remove btn disabled" style="visibility: hidden"></span>
@@ -104,18 +101,22 @@
                     </tr>
                 </tbody>
             </table>
-            <!--<div class="pull-left btn" id="prev"><span class="glyphicon glyphicon-chevron-left"></span> prev 10</div>-->
-            <!--<div class="pull-right btn" id="next">next 10 <span class="glyphicon glyphicon-chevron-right"></span></div>-->
-            <!--<h3 id="unavailable">User Info Unavailable</h3>-->
         </div>
         <!--End Report Area-->
     </div>
 
     <!--detail modal -->
-
     <modal header="{{ mc.detailStudent.name }}" modal-id="{{ mc.detailModalId }}">
-        <h6 id="info_assignment">Assignment: {{ mc.detailStudent.assignment }}</h6>
-        <h6 id="info_grade">Grade: {{ mc.detailStudent.grade }}</h6>
+        <h5 id="info_assignment">Assignment: {{ mc.detailStudent.assignment }}</h5>
+        <h5 id="info_grade">Grade: {{ mc.detailStudent.grade }}</h5>
+        <button type="button" class="btn btn-danger" data-toggle="modal"
+                data-target="#{{ mc.editModalId }}" >Edit</button>
+    </modal>
+    <!--edit modal-->
+    <modal header="Edit Student" modal-id="{{ mc.editModalId }}">
+        <input type="text" ng-model="mc.detailStudent.name" id="edit-name" disabled><br>
+        <input type="text" ng-model="mc.detailStudent.assignment" id="edit-assignment" disabled><br>
+        <input type="text" ng-model="mc.detailStudent.grade" id="edit-grade" disabled><br>
     </modal>
 </body>
 </html>
