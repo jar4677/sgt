@@ -77,10 +77,8 @@ app.controller('mainController', function ($http, $log) {
     self.getStudentDetail = function (index) {
         self.detailStudent = self.data[index];
     };
-    
-    //TODO send data to server
-    
-    //TODO get data from server
+
+    //get data from server
     self.getStudents = function () {
         $http({
             url: 'apis/get_students.php',
@@ -93,9 +91,25 @@ app.controller('mainController', function ($http, $log) {
             })
     };
 
+    //call on load
     self.getStudents();
 
     //TODO update data on server
+    self.updateStudent = function (student) {
+        $http({
+            url: 'apis/update_student.php',
+            method: 'post',
+            data: $.param(student),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+            .then(function (response) {
+                $log.info(response);
+            }, function (response) {
+                $log.warn(response);
+            })
+    };
     
     //TODO delete data on server
     

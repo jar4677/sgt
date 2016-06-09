@@ -1,5 +1,5 @@
 <?php
-//require_once("../cred/mysql_connect_sgt.php");
+require_once("/var/www/cred/mysql_connect_sgt.php");
 
 function sanitize($string){
     if(is_numeric($string)){
