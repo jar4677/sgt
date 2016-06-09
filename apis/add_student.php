@@ -26,3 +26,5 @@ if(empty($_POST)){
 	print('unsuccessful');
     };
 };
+
+mysqli_close($conn);
