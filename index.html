@@ -91,7 +91,9 @@
                             <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
                                     data-target="#{{ mc.detailModalId }}" ng-click="mc.getStudentDetail($index)">Details
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger">Delete</button>
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    ng-click="mc.deleteStudent(mc.data[$index])">Delete
+                            </button>
                         </td>
                     </tr>
                     <tr>
