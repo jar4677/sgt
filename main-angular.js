@@ -113,6 +113,22 @@ app.controller('mainController', function ($http, $log) {
     };
 
     //TODO delete data on server
+    self.deleteStudent = function (student) {
+        $http({
+            url: 'apis/delete_student.php',
+            method: 'post',
+            data: $.param(student),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+            .then(function (response) {
+                self.getStudents();
+                $log.info(response);
+            }, function (response) {
+                $log.warn(response);
+            })
+    };
     
     //TODO sort results by field
     
