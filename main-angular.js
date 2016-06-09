@@ -57,7 +57,7 @@ app.controller('mainController', function ($http, $log) {
         };
 
         $http({
-            url: 'apis/add_student.php',
+            url: 'http://jonrasmussen.me/sgt/apis/add_student.php',
             data: $.param(student),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -67,9 +67,8 @@ app.controller('mainController', function ($http, $log) {
         })
             .then(function (response) {
                 $log.info(response.data);
-                self.data.push(student);
+                self.getStudents();
                 // self.averageGrade = self.getAvgGrade(self.data);
-                self.clearForm();
             }, function (response) {
                 $log.warn(response);
             });
@@ -78,12 +77,39 @@ app.controller('mainController', function ($http, $log) {
     self.getStudentDetail = function (index) {
         self.detailStudent = self.data[index];
     };
-    
-    //TODO send data to server
-    
-    //TODO get data from server
-    
+
+    //get data from server
+    self.getStudents = function () {
+        $http({
+            url: 'apis/get_students.php',
+            method: 'get'
+        })
+            .then(function (response) {
+                self.data = response.data;
+            }, function (response) {
+                $log.warn(response);
+            })
+    };
+
+    //call on load
+    self.getStudents();
+
     //TODO update data on server
+    self.updateStudent = function (student) {
+        $http({
+            url: 'apis/update_student.php',
+            method: 'post',
+            data: $.param(student),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+            .then(function (response) {
+                $log.info(response);
+            }, function (response) {
+                $log.warn(response);
+            })
+    };
     
     //TODO delete data on server
     
