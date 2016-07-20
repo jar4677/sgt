@@ -1,11 +1,11 @@
 /**
  * Define all global variables here
  */
+
 /**
  * studentArray - global array to hold student objects
  * @type {Array}
  */
-
 var sgt = {
     index: 0,
     displayArray: [],

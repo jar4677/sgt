@@ -17,8 +17,8 @@ app.controller('mainController', function ($http, $log) {
         if(array.length > 0){
             var sum = 0;
             var count = 0;
-            for (var x in array){
-                sum += parseInt(x.grade);
+            for (var i = 0; i < array.length; i++){
+                sum += parseInt(array[i].grade);
                 count++;
             }
             return Math.round(sum / count);
@@ -68,7 +68,7 @@ app.controller('mainController', function ($http, $log) {
             .then(function (response) {
                 $log.info(response.data);
                 self.getStudents();
-                // self.averageGrade = self.getAvgGrade(self.data);
+                self.averageGrade = self.getAvgGrade(self.data);
             }, function (response) {
                 $log.warn(response);
             });
