@@ -12,12 +12,11 @@ app.controller('mainController', function ($http, $log) {
     self.editModalId = 'edit';
     self.detailStudent = {};
     
-    //TODO fix get average grade (returns NaN)
     self.getAvgGrade = function (array) {
-        if(array.length > 0){
+        if (array.length > 0) {
             var sum = 0;
             var count = 0;
-            for (var i = 0; i < array.length; i++){
+            for (var i = 0; i < array.length; i++) {
                 sum += parseInt(array[i].grade);
                 count++;
             }
@@ -31,16 +30,16 @@ app.controller('mainController', function ($http, $log) {
         self.newAssignment = '';
         self.newGrade = '';
     };
-
+    
     self.submitForm = function () {
-        if(self.validateInputs()){
+        if (self.validateInputs()) {
             self.addStudent();
-        }  else {
+        } else {
             //TODO better input error handling
             $log.log('do something else here');
         }
     };
-
+    
     self.validateInputs = function () {
         return (
         self.newName.length >= 3 &&
@@ -55,7 +54,7 @@ app.controller('mainController', function ($http, $log) {
             'assignment': self.newAssignment,
             'grade': self.newGrade
         };
-
+        
         $http({
             url: 'http://jonrasmussen.me/sgt/apis/add_student.php',
             data: $.param(student),
@@ -77,7 +76,7 @@ app.controller('mainController', function ($http, $log) {
     self.getStudentDetail = function (index) {
         self.detailStudent = self.data[index];
     };
-
+    
     //get data from server
     self.getStudents = function () {
         $http({
@@ -85,17 +84,18 @@ app.controller('mainController', function ($http, $log) {
             method: 'get'
         })
             .then(function (response) {
-		self.data = response.data;
-		self.clearForm();
+                self.data = response.data;
+                self.averageGrade = self.getAvgGrade(self.data);
+                self.clearForm();
             }, function (response) {
                 $log.warn(response);
             })
     };
-
+    
     //call on load
     self.getStudents();
-
-    //TODO update data on server
+    
+    //update data on server
     self.updateStudent = function (student) {
         $http({
             url: 'apis/update_student.php',
@@ -106,13 +106,15 @@ app.controller('mainController', function ($http, $log) {
             }
         })
             .then(function (response) {
+                self.getStudents();
+                self.averageGrade = self.getAvgGrade(self.data);
                 $log.info(response);
             }, function (response) {
                 $log.warn(response);
             })
     };
-
-    //TODO delete data on server
+    
+    //delete data on server
     self.deleteStudent = function (student) {
         $http({
             url: 'apis/delete_student.php',
@@ -124,6 +126,7 @@ app.controller('mainController', function ($http, $log) {
         })
             .then(function (response) {
                 self.getStudents();
+                self.averageGrade = self.getAvgGrade(self.data);
                 $log.info(response);
             }, function (response) {
                 $log.warn(response);
